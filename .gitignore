@@ -1,3 +1,4 @@
 .venv/
 cuda_model/
 data/
+burn-CNN/target/
