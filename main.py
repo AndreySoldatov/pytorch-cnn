@@ -139,7 +139,7 @@ def train(artifact_dir: str, config: TrainingConfig) -> None:
     create_artifact_dir(artifact_dir)
     save_config(config, artifact_dir)
 
-    device = torch.device("cuda")
+    device = torch.device("cpu")
     seed_everything(config.seed)
 
     model = Model(
@@ -163,7 +163,6 @@ def train(artifact_dir: str, config: TrainingConfig) -> None:
         shuffle=True,  # matches `.shuffle(config.seed)`
         num_workers=config.num_workers,
         collate_fn=mnist_collate_fn,
-        pin_memory=True,
         generator=generator,
     )
 
@@ -194,7 +193,7 @@ def train(artifact_dir: str, config: TrainingConfig) -> None:
             total_loss += loss.item()
             iter_samples.append(time.perf_counter() - iter_start)
 
-        torch.cuda.synchronize()
+        # torch.cuda.synchronize()
         print(f"Epoch: {epoch}, Avg Loss: {total_loss / iters}")
         epoch_samples.append(time.perf_counter() - epoch_start)
 
